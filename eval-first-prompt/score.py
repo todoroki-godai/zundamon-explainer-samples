@@ -17,6 +17,7 @@ from pathlib import Path
 HERE = Path(__file__).parent
 CASES = HERE / "cases.jsonl"
 PREDS = HERE / "outputs" / "predictions.jsonl"
+SAMPLE = HERE / "outputs" / "predictions.sample.jsonl"  # 初見でも動かせるお試し予測（わざと雑）
 
 
 def load_jsonl(path: Path) -> list[dict]:
@@ -26,14 +27,22 @@ def load_jsonl(path: Path) -> list[dict]:
 def main() -> None:
     cases = {c["id"]: c for c in load_jsonl(CASES)}
 
-    if not PREDS.exists():
+    if PREDS.exists():
+        target, is_sample = PREDS, False
+    elif SAMPLE.exists():
+        target, is_sample = SAMPLE, True   # 自分の予測がまだ無ければ、お試し予測を採点
+    else:
         print(f"予測ファイルがありません: {PREDS}")
         print("→ prompt.txt で cases.jsonl を分類し、上の形式で保存してください")
         print('  （Claude Code に「prompt.txt のルールで cases.jsonl を分類して')
         print('    outputs/predictions.jsonl に出して」と頼むのが早いです）')
         sys.exit(1)
 
-    preds = {p["id"]: p["label"] for p in load_jsonl(PREDS)}
+    if is_sample:
+        print("※ お試し予測（predictions.sample.jsonl）を採点中。")
+        print("  自分の予測を outputs/predictions.jsonl に置くと、そちらに差し替わります。\n")
+
+    preds = {p["id"]: p["label"] for p in load_jsonl(target)}
 
     correct, misses = 0, []
     for cid, case in cases.items():
