@@ -1,0 +1,6 @@
+{
+  "target": "calc.py",
+  "tests": "test_calc",
+  "must_implement": ["add", "subtract"],
+  "forbidden": ["NotImplementedError", "TODO", "FIXME"]
+}
