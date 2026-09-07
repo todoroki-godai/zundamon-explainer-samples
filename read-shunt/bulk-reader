@@ -1,0 +1,28 @@
+#!/bin/bash
+# 安いワーカーモデルにファイルを読ませ、要約だけを返す（記事の bulk-reader 相当）。
+# 使い方: bulk-reader <ファイルパス> "<知りたいこと>"
+set -u
+F="$1"; Q="${2:-このファイルの役割と主要な処理を説明して}"
+[ -f "$F" ] || { echo "no such file: $F" >&2; exit 1; }
+TMP=$(mktemp); S=$(date +%s)
+{ printf '以下のファイルを読み、質問に答えてください。推測せず、書かれていることだけを答えること。\n\n## 質問\n%s\n\n## ファイル: %s\n```\n' "$Q" "$F"; cat "$F"; printf '\n```\n'; } \
+  | claude -p --model haiku --output-format json > "$TMP" 2>/dev/null
+E=$(date +%s)
+SHUNT_LOG="${SHUNT_LOG:-/dev/null}" WF="$F" WS=$S WE=$E python3 - "$TMP" <<'PY'
+import json, os, sys
+raw = open(sys.argv[1]).read()
+try:
+    d = json.loads(raw)
+except Exception:
+    print(raw); sys.exit(0)
+u = d.get("usage", {})
+rec = {"worker_file": os.environ["WF"], "worker_sec": int(os.environ["WE"]) - int(os.environ["WS"]),
+       "worker_in": u.get("input_tokens", 0) + u.get("cache_creation_input_tokens", 0) + u.get("cache_read_input_tokens", 0),
+       "worker_out": u.get("output_tokens", 0), "worker_cost": d.get("total_cost_usd", 0)}
+log = os.environ["SHUNT_LOG"]
+if log != "/dev/null":
+    with open(log, "a") as f:
+        f.write(json.dumps(rec) + "\n")
+print(d.get("result", ""))
+PY
+rm -f "$TMP"
