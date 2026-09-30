@@ -1,4 +1,4 @@
-"""Run with: python3 -m unittest discover -s skills/motion-video/tests -p test_tts.py -v"""
+"""Run with: python3 -m unittest discover -s motion-video/tests -p test_tts.py -v"""
 import importlib.util
 import base64
 import hashlib

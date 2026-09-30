@@ -1,22 +1,22 @@
 # 一言の依頼から、15〜45秒のCM・解説動画（MP4）を作るスキル
 
-動画の要点：「動画を作って」と一言頼むだけで、Claude が**世界観・ビート（速さ）・声**を選び、**台詞に合わせた場面を毎回書き下ろして**、声つきの MP4 まで仕上げる。
+動画の要点：セットアップしたら、短い依頼から Claude が**世界観・ビート（速さ）・声**を選び、**台詞に合わせた場面を毎回書き下ろして**動画を組み立てる。機械の点検と、人の目での確認（コマ一覧の目視・再生）を経て、声つきの MP4 に仕上げる。点検が赤なら直して作り直す前提です。
 
-このフォルダは、その仕組みを **Claude Code のスキル**としてそのまま置ける形にした教材です。
+このフォルダは、その仕組みを **Claude Code のスキル**として置ける形にした教材です。
+
+### 動画で使った版との違い（公開版の範囲）
+
+- **外したもの**：設計メモ（`DESIGN.md`）、ずんだもんの立ち絵、見本の画像（3D導入の最終コマ）、見本に依存する一部のテスト（外部に依存しない3本だけ残した）
+- **任意機能として残したもの**：Blender による導入3D（`threeD: "blender"`）。同梱の見本は使わない
+- **含まないもの**：画像を作るAI（Gemini 3 Pro Image）や動画を作るAI（Veo）による素材づくり。ここにあるのは、HTML の場面を撮影して合成する部分と、Gemini の読み上げ（TTS）だけ
+- 見本（`examples/channel-promo/`）は、画像なしの CSS だけの版に書き直してある
 
 ## 何ができるか
 
-- 一言の依頼（例:「ずんだマートの週末セールのCMを作って」）から、15〜45秒の MP4 を1本作る
+- 短い依頼（例:「ずんだマートの週末セールのCMを作って」）から、15〜45秒の MP4 を1本作る（点検と目視確認つき）
 - 決めるのは4つの軸：**型**（話の順番。`bin/motion-video list` で一覧）・**世界観**（色と質感）・**ビート**（速さと雰囲気）・**声**（語り口）
 - 場面（HTML + JS）は、台詞の内容に合わせて Claude が毎回書く。決まったテンプレートに文字を流し込むのではない
 - 作った動画を機械で点検する（文字が読めるか・声が無音でないか・黒い画面がないか）。最後に1秒ごとのコマ一覧 `review/sheet.png` を作るので、目でも確かめる
-
-## 置き方
-
-次のどちらか。
-
-1. スキルとして置く：このフォルダを `~/.claude/skills/motion-video/` にコピーし、中で `npm install`
-2. Claude Code でこのフォルダを開き、`SKILL.md` を読ませる
 
 ## 必要なもの
 
@@ -24,7 +24,7 @@
 
 | 必要なもの | 何に使う | 備考 |
 |---|---|---|
-| Node.js | 画面の撮影・点検（`playwright-core`） | `npm install` で入る |
+| Node.js 20 以上と npm | 画面の撮影・点検（`playwright-core`） | **先に自分で入れる**（`npm install` では入らない。`package-lock.json` が `>=20` を要求） |
 | Chromium headless shell | 場面を1コマずつ撮る | `npx playwright-core install chromium-headless-shell` |
 | ffmpeg / ffprobe | 連結・音声との合成・点検 | 別途インストール |
 | Python 3 + `numpy` + `Pillow` | 音声・ビートの生成、点検 | `pip install numpy pillow` |
@@ -34,6 +34,26 @@
 **かかるお金**：声の生成で Gemini の API を呼ぶため、API の利用料がかかります。料金は変わり得るので、公式の料金ページで確認してください。それ以外（撮影・合成・点検）は手元の計算だけです。
 
 **外部に送るもの**：Gemini の読み上げに送るのは、台詞・読み上げの指示・設定・API キーだけです。
+
+## セットアップと置き方
+
+順番に進めてください。
+
+1. **必要なものを入れる**：上の表の Node.js 20 以上と npm、ffmpeg、Python 3 を先にインストールする。
+2. **置く場所を決める**（どちらでも、以降の手順は同じ）
+   - A. スキルとして置く：このフォルダを `~/.claude/skills/motion-video/` にコピーし、以降その中で作業する
+   - B. このフォルダを Claude Code で開き、`SKILL.md` を読ませる
+3. **そのフォルダ（`motion-video/`）で依存を入れる**
+   ```
+   npm install
+   pip install numpy pillow
+   npx playwright-core install chromium-headless-shell
+   ```
+4. **API キーを環境変数で渡す**（本番の声を作る時だけ。ドライランは不要）
+   ```
+   export GOOGLE_GENERATIVE_AI_API_KEY=（自分のキー）
+   ```
+5. 以降のコマンドは、`motion-video/` フォルダを実行ディレクトリにして `bin/motion-video ...` と打つ。
 
 ## 使い方
 
@@ -56,8 +76,6 @@ Claude は `SKILL.md` の手順で進めます。
 API キーなしで、声の代わりにダミー音声（試験用。納品には使えない）で最後まで通せます。
 
 ```
-npm install
-npx playwright-core install chromium-headless-shell
 bin/motion-video new /tmp/mv-demo --from channel-promo
 MOTION_VIDEO_TTS_MOCK=1 bin/motion-video build /tmp/mv-demo
 ```
@@ -88,11 +106,12 @@ PASS 尺=20.50s 台詞ごとの声=5 相関最小=0.999014 無音=0 黒コマ=0 
 
 ## 同梱のテスト
 
-`tests/` には、外部に依存しない3本だけ入れています。
+`tests/` には、外部に依存しない4本だけ入れています（フォント記録の検査を含む）。
 
 ```
 python3 tests/test_tts.py
 python3 tests/test_check_silence.py
+python3 tests/test_font_record.py
 node tests/coverage_logic.test.mjs
 ```
 

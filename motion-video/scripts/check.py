@@ -33,6 +33,14 @@ def detect_silence(path, start, end):
         raise RuntimeError('silencedetect failed')
     return 'silence_start:' in result.stderr
 
+def font_record(work):
+    """Fonts the browser actually used (written by coverage.mjs). Never depends on OS font paths."""
+    path=work/'platform_fonts.json'
+    try: names=json.loads(path.read_text())
+    except (OSError,ValueError): names=None
+    if not isinstance(names,list) or not names: return {'status':'未記録','families':[]}
+    return {'status':'記録済み','families':names}
+
 def fingerprint(work):
     assets={}
     for path in sorted(work.iterdir()):
@@ -40,10 +48,7 @@ def fingerprint(work):
             assets[str(path.relative_to(work))]=hashlib.sha256(path.read_bytes()).hexdigest()
     for path in [ROOT/'runtime.js',ROOT/'scripts/scene3d.py']:
         assets[str(path.relative_to(ROOT))]=hashlib.sha256(path.read_bytes()).hexdigest()
-    font_paths=sorted(Path('/System/Library/Fonts').glob('*ヒラ*'))
-    font_paths += [Path('/System/Library/Fonts/Supplemental/Arial.ttf'),Path('/System/Library/Fonts/Supplemental/Arial Bold.ttf')]
-    fonts={str(path):hashlib.sha256(path.read_bytes()).hexdigest() for path in font_paths if path.is_file()}
-    result={'effective_sha256':hashlib.sha256((work/'effective.json').read_bytes()).hexdigest(), 'browser':(work/'browser_version.txt').read_text().strip(), 'ffmpeg':cmd(['ffmpeg','-version']).splitlines()[0], 'assets':assets, 'fonts':fonts, 'platform_fonts':json.loads((work/'platform_fonts.json').read_text()) if (work/'platform_fonts.json').exists() else [], 'blender':cmd(['blender','--version']).splitlines()[0] if json.loads((work/'effective.json').read_text()).get('threeD')=='blender' else None}
+    result={'effective_sha256':hashlib.sha256((work/'effective.json').read_bytes()).hexdigest(), 'browser':(work/'browser_version.txt').read_text().strip(), 'ffmpeg':cmd(['ffmpeg','-version']).splitlines()[0], 'assets':assets, 'fonts':font_record(work), 'blender':cmd(['blender','--version']).splitlines()[0] if json.loads((work/'effective.json').read_text()).get('threeD')=='blender' else None}
     (work/'render_env.json').write_text(json.dumps(result,indent=2))
 
 def check(work):
