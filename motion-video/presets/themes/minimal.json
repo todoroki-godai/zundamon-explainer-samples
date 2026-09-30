@@ -1,0 +1,17 @@
+{
+  "bg": "#ffffff",
+  "fg": "#1c2731",
+  "surface": "#f0f2f4",
+  "on-surface": "#1c2731",
+  "accent": "#234b6d",
+  "on-accent": "#ffffff",
+  "em": "#974a20",
+  "accent2": "#bacfd9",
+  "warn": "#b32931",
+  "font": "Arial, sans-serif",
+  "motif": "none",
+  "transition": "slide",
+  "textFx": "none",
+  "motifOpacity": 0.12,
+  "description": "白地と余白"
+}

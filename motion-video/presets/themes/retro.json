@@ -1,0 +1,17 @@
+{
+  "bg": "#29241f",
+  "fg": "#fbe8c6",
+  "surface": "#493b2b",
+  "on-surface": "#fff0d6",
+  "accent": "#eab85c",
+  "on-accent": "#29241f",
+  "em": "#fff29a",
+  "accent2": "#8dc3a7",
+  "warn": "#f27d70",
+  "font": "monospace",
+  "motif": "stripes",
+  "transition": "slide",
+  "textFx": "glow",
+  "motifOpacity": 0.08,
+  "description": "ブラウン管風"
+}

@@ -1,0 +1,17 @@
+{
+  "bg": "#101629",
+  "fg": "#ffffff",
+  "surface": "#202b45",
+  "on-surface": "#ffffff",
+  "accent": "#ff66cc",
+  "on-accent": "#101629",
+  "em": "#ffe66d",
+  "accent2": "#45e8ff",
+  "warn": "#ff7666",
+  "font": "Arial, sans-serif",
+  "motif": "grid",
+  "transition": "punch",
+  "textFx": "glow",
+  "motifOpacity": 0.12,
+  "description": "ネオンとグリッド"
+}

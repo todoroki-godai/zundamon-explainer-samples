@@ -1,0 +1,36 @@
+{
+  "type": "announce",
+  "theme": "neon",
+  "beat": "edm",
+  "voice": "hype",
+  "title": "AI開発レベルアップ日記",
+  "subtitle": "チャンネル登録、よろしくね！",
+  "seed": 7,
+  "lines": [
+    {
+      "text": "AIで、開発はどこまで変わる？",
+      "caption": "AIで、開発はどこまで変わる？",
+      "style": "Say with excitement and high energy, like opening a hype video"
+    },
+    {
+      "text": "新しいモデルが出たら、まず自分の手で試す。",
+      "caption": "新しいモデルが出たら、まず自分の手で試す。",
+      "style": "Say briskly and clearly"
+    },
+    {
+      "text": "うまくいったことも、失敗したことも、全部見せる。",
+      "caption": "うまくいったことも、失敗したことも、全部見せる。",
+      "style": "Say briskly and clearly"
+    },
+    {
+      "text": "ずんだもんと一緒に、毎回ひとつレベルアップ。",
+      "caption": "ずんだもんと一緒に、毎回ひとつレベルアップ。",
+      "style": "Say playfully, with a little mischief"
+    },
+    {
+      "text": "AI開発レベルアップ日記。チャンネル登録、よろしくね！",
+      "caption": "AI開発レベルアップ日記。チャンネル登録、よろしくね！",
+      "style": "Say powerfully, as a closing catchphrase"
+    }
+  ]
+}

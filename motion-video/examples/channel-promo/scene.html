@@ -1,0 +1,42 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:var(--bg);font-family:var(--font);}
+  #stage{position:absolute;inset:0;overflow:hidden}
+  .abs{position:absolute;left:0;top:0;backface-visibility:hidden}
+  .grid{pointer-events:none;position:absolute;inset:-200px;background-image:linear-gradient(rgba(80,160,255,.10) 2px,transparent 2px),linear-gradient(90deg,rgba(80,160,255,.10) 2px,transparent 2px);background-size:120px 120px}
+  .glow{pointer-events:none;position:absolute;width:1400px;height:1400px;border-radius:50%;background:radial-gradient(circle,rgba(126,217,87,.28),transparent 60%)}
+  .word{font-weight:900;color:var(--fg);white-space:nowrap;letter-spacing:.02em;text-shadow:0 8px 40px rgba(0,0,0,.5)}
+  .green{color:var(--em)}
+  .em{color:var(--em)}
+  .card{border-radius:36px;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.22);backdrop-filter:blur(18px);box-shadow:0 30px 80px rgba(0,0,0,.35)}
+  .term{font-family:Menlo,monospace;font-size:52px;color:var(--fg);padding:44px 60px;width:1100px;height:170px;box-sizing:border-box}
+  .pill{font-size:84px;font-weight:900;padding:40px 70px;color:var(--fg)}
+  .stamp{font-size:150px;font-weight:900;color:var(--fg);border:14px solid #FFD84D;border-radius:30px;padding:10px 60px}
+  .bar{width:1000px;height:56px;border-radius:28px;background:rgba(255,255,255,.12);overflow:hidden;border:2px solid rgba(255,255,255,.25)}
+  .fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+  .btn{font-size:72px;font-weight:900;color:var(--on-accent);background:var(--accent);border-radius:28px;padding:26px 70px;box-shadow:0 12px 40px rgba(255,59,59,.5)}
+</style></head>
+<body><div id="stage">
+  <div class="grid abs" id="grid"></div>
+  <div class="glow abs" id="glow"></div>
+  <!-- s1 -->
+  <div class="abs word t-on-bg" id="s1a" style="font-size:170px">AIで、<span class="em">開発</span>は</div>
+  <div class="abs word t-on-bg" id="s1b" style="font-size:190px">どこまで変わる<span id="q" class="em" style="display:inline-block">？</span></div>
+  <!-- s2 -->
+  <div class="abs word t-on-bg" id="s2a" style="font-size:120px">新しいモデルが出たら</div>
+  <div class="abs card term t-on-bg" id="s2t"></div>
+  <div class="abs word t-on-bg" id="s2b" style="font-size:150px">まず<span class="em">自分の手</span>で試す</div>
+  <!-- s3 -->
+  <div class="abs card pill t-on-bg" id="s3a" style="background:rgba(126,217,87,.25)">✓ うまくいった</div>
+  <div class="abs card pill t-on-bg" id="s3b" style="background:rgba(255,80,80,.25)">✗ 失敗した</div>
+  <div class="abs stamp t-on-bg" id="s3c">全部見せる</div>
+  <!-- s4 -->
+  <div class="abs word t-on-bg" id="s4a" style="font-size:110px">毎回ひとつ</div>
+  <div class="abs word t-on-bg" id="s4lv" style="font-size:200px"></div>
+  <div class="abs bar" id="s4bar"><div class="fill" id="s4fill"></div></div>
+  <!-- s5 -->
+  <div class="abs word t-on-bg" id="s5a" style="font-size:130px"><span class="em">AI開発</span>レベルアップ日記</div>
+  <div class="abs btn t-on-accent" id="s5b">チャンネル登録</div>
+</div>
+<script src="runtime.js"></script><script src="scene.js"></script></body></html>

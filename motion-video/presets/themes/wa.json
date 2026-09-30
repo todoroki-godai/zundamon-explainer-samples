@@ -1,0 +1,17 @@
+{
+  "bg": "#f4eddc",
+  "fg": "#25201c",
+  "surface": "#e2d2b2",
+  "on-surface": "#25201c",
+  "accent": "#7b3038",
+  "on-accent": "#ffffff",
+  "em": "#71351a",
+  "accent2": "#a37549",
+  "warn": "#a02b31",
+  "font": "serif",
+  "motif": "paper",
+  "transition": "wipe",
+  "textFx": "shadow",
+  "motifOpacity": 0.12,
+  "description": "和紙と明朝"
+}

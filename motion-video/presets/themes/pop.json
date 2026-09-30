@@ -1,0 +1,17 @@
+{
+  "bg": "#fff8d9",
+  "fg": "#20202e",
+  "surface": "#ffffff",
+  "on-surface": "#20202e",
+  "accent": "#a91d3b",
+  "on-accent": "#ffffff",
+  "em": "#2536ac",
+  "accent2": "#20b89d",
+  "warn": "#aa252e",
+  "font": "Arial, sans-serif",
+  "motif": "stripes",
+  "transition": "punch",
+  "textFx": "outline",
+  "motifOpacity": 0.12,
+  "description": "明るい原色"
+}

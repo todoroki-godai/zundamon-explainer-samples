@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+import json
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT/'scripts'))
+
+def run(args, timeout=None):
+    subprocess.run(args, check=True, timeout=timeout)
+
+def main():
+    if len(sys.argv) == 2 and sys.argv[1] == 'list':
+        labels = {'announce':'イベント告知','study':'解説','cm':'商品CM','chart':'グラフ図解','flyer':'チラシと割引','story':'絵本','history':'年表','profile':'経歴カード'}
+        for axis in ('recipes','themes','beats','voices'):
+            print(axis + ':')
+            directory = ROOT/('recipes' if axis == 'recipes' else 'presets/'+axis)
+            for path in sorted(directory.iterdir()):
+                if axis == 'recipes':
+                    if path.stem in labels: print(f'  {path.stem}: {labels[path.stem]}')
+                elif path.suffix == '.json':
+                    print(f'  {path.stem}: {json.loads(path.read_text())["description"]}')
+        return
+    if len(sys.argv) == 5 and sys.argv[1] == 'new' and sys.argv[3:] == ['--from','channel-promo']:
+        work=Path(sys.argv[2]).resolve()
+        if work.exists() and any(work.iterdir()): raise SystemExit('new: workdir must be empty')
+        shutil.copytree(ROOT/'examples/channel-promo', work, dirs_exist_ok=True)
+        print(f'PASS new {work}')
+        return
+    if len(sys.argv) != 3 or sys.argv[1] not in ('build','check'):
+        raise SystemExit('usage: motion-video list | new <workdir> --from channel-promo | build|check <workdir>')
+    command, work = sys.argv[1], Path(sys.argv[2]).resolve()
+    if command == 'check':
+        raise SystemExit(subprocess.run([sys.executable,str(ROOT/'scripts/check.py'),str(work)]).returncode)
+    if not (work/'scene.html').is_file(): raise SystemExit('scene.html missing')
+    run([sys.executable,str(ROOT/'scripts/resolve.py'),str(work)])
+    brief = json.loads((work/'effective.json').read_text())
+    for script in ('tts.py','timeline.py','beat.py'):
+        run([sys.executable,str(ROOT/'scripts'/script),str(work)])
+    if brief.get('threeD') == 'blender':
+        try:
+            run(['blender','-b','--factory-startup','-t','1','--python-exit-code','1','--python',str(ROOT/'scripts/scene3d.py'),'--',str(work)], timeout=600)
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
+            raise RuntimeError('Blender failed; remove threeD and rerun') from None
+    run([sys.executable,str(ROOT/'scripts/static_checks.py'),str(work)])
+    run(['node',str(ROOT/'scripts/coverage.mjs'),str(work)])
+    run(['node',str(ROOT/'scripts/capture.mjs'),str(work)])
+    run([sys.executable,str(ROOT/'scripts/assemble.py'),str(work)])
+    run([sys.executable,str(ROOT/'scripts/check.py'),str(work)])
+
+if __name__ == '__main__':
+    main()

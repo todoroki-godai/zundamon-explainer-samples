@@ -1,0 +1,17 @@
+{
+  "bg": "#171923",
+  "fg": "#f9f4e9",
+  "surface": "#30323b",
+  "on-surface": "#ffffff",
+  "accent": "#e9d199",
+  "on-accent": "#181923",
+  "em": "#f5cbaa",
+  "accent2": "#8379a6",
+  "warn": "#ff8e80",
+  "font": "Arial, sans-serif",
+  "motif": "none",
+  "transition": "fade",
+  "textFx": "shadow",
+  "motifOpacity": 0.12,
+  "description": "暗い画面と静かな動き"
+}
