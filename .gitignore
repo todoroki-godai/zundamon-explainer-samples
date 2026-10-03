@@ -1,3 +1,7 @@
 # Python
 __pycache__/
 *.py[cod]
+
+# Claude Code mods: エンジンが読み込み時に書き出す型定義と tsconfig
+claude-code-mods/*/.claude-plugin/types/
+claude-code-mods/*/tsconfig.json

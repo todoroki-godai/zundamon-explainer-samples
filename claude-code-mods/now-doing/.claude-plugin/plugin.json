@@ -1,0 +1,7 @@
+{
+  "name": "now-doing",
+  "version": "0.1.0",
+  "description": "入力欄の上に、いまの依頼・いまの作業・記憶領域の使用率を出す。",
+  "author": { "name": "You" },
+  "types": "./types/index.d.ts"
+}
